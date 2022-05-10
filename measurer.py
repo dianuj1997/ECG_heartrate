@@ -844,7 +844,7 @@ while iter_loop<=total_loops:
 
                 # Find Q and S waves in the signal
                 for ii in range(0,len(rlocs)):
-                    window = denoised_detrended_ecg[rlocs[ii]-80:(rlocs(ii)+80))
+                    window = denoised_detrended_ecg[rlocs[ii]-80:(rlocs(ii)+80)]
                     d_peaks, locs_peaks = find_peaks(-window, distance=40)
                     i=np.argsort(np.array(d_peaks))
                     i=np.flip(i)
