@@ -805,7 +805,7 @@ while iter_loop<=total_loops:
                     if my_sig[k] > my_sig[k-1] and my_sig[k]> my_sig[k+1] and my_sig[k]>1:
                         beat_count = beat_count + 1
 
-                N = length(my_sig);
+                N = len(my_sig)
                 duration_in_seconds = N/fs
                 duration_in_minutes = duration_in_seconds/60
                 BPM_avg = beat_count/duration_in_minutes
