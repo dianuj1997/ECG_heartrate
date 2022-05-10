@@ -829,54 +829,24 @@ while iter_loop<=total_loops:
             #------------Measure heart rate (Method #15)---------------------------------------------
             # https://www.mathworks.com/matlabcentral/mlc-downloads/downloads/submissions/53983/versions/5/previews/html/ExampleECGBitalino.html
             try:
-                ecg=np.array(my_ecg_data,dtype=float)
-                ecg=ecg/np.max(ecg)*2
-                timer=np.array(my_time_data,dtype=float)
-                timer=timer[0:len_of_data]
-                detrended_ecg=signal.detrend(ecg)
-                denoised_detrended_ecg=savgol_filter(detrended_ecg,length, order)
-                _, rlocs = find_peaks(denoised_detrended_ecg, distance=500,height=0.8)
-                locs_Qwave = np.zeros(len(rlocs),1);
-                locs_Swave = np.zeros(len(rlocs),1);
-                locs_Qpre  = np.zeros(len(rlocs),1);
-                locs_Spost = np.zeros(len(rlocs),1);
-                QRs = np.zeros(len(rlocs),1);
-
-                # Find Q and S waves in the signal
-                for ii in range(0,len(rlocs)):
-                    window = denoised_detrended_ecg[rlocs[ii]-80:(rlocs(ii)+80)]
-                    d_peaks, locs_peaks = find_peaks(-window, distance=40)
-                    i=np.argsort(np.array(d_peaks))
-                    i=np.flip(i)
-                    locs_Qwave[ii] = locs_peaks[i[1]]+(rlocs[ii]-80)
-                    locs_Swave[ii] = locs_peaks[i[2]]+(rlocs[ii]-80)
-                    d_QRS, locs_QRS= find_peaks(window, height=10)
-                    max_i = np.argmax(d_QRS)
-                    locs_Q_flat = locs_QRS[max_i-1]
-                    locs_S_flat = locs_QRS[max_i+1]
-                    locs_Qpre[ii]  = locs_Q_flat+(rlocs[ii]-80)
-                    locs_Spost[ii] = locs_S_flat+(rlocs[ii]-80)
-                    QRs[ii] = locs_S_flat - locs_Q_flat
+                 _, rlocser = find_peaks(denoised_detrended_ecg, distance=500,height=0.8)
+                rlocs=rlocser['peak_heights']
 
                 # Calculate the heart rate
-                myqrs = np.median(QRs)
                 myheartrate = 60/(np.median(np.diff(rlocs))/ 1000)
 
-                print("----Heart Rate (Method #15)----: ",myheartrate)
-                print("----QRS (ms) (Method #15)----: ",myqrs)
-                print("\n")
-                
                 if myheartrate!="nan" or myheartrate!="inf":
                     hr_15.append(myheartrate)
                 else:
                     hr_15.append(0)
+
 
             except:
                 print("----Heart Rate (Method #15) not possible----: ")
                 print("\n")
                 hr_15.append(0)
 
-
+    
 
 
             #--------------------------------------------------------------------------------------------------------------------------------
